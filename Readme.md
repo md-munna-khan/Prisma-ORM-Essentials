@@ -361,3 +361,55 @@ console.log("Hello From Prisma")
 main()
 
 ```
+
+## 48-5 Inserting Data into the Database
+- we will delete the generate folder and generate again but we do not want to mention the output here in schema.prisma
+
+```prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int     @id @default(autoincrement())
+  name         String
+  email        String // required field 
+  profilePhoto String? // making it optional
+}
+
+```
+- run the command to generate new 
+
+```
+npx generate prisma 
+```
+- add the script to package.js 
+
+```json 
+  "scripts": {
+    // "dev": "node --loader ts-node/esm src/index.ts",
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+```
+
+- src -> index.ts
+
+```ts 
+
+```
+
+- now run `npm run dev` this will create the user. 
