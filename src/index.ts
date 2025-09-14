@@ -44,15 +44,17 @@ async function main() {
 // console.log(updatedProfilePhoto)
 
 // delete user
-const deleteUser = await prisma.user.deleteMany({
-  where:{
-    id:{
-      lt:3
-    }
-  }
+// const deleteUser = await prisma.user.deleteMany({
+//   where:{
+//     id:{
+//       lt:3
+//     }
+//   }
 
-})
-console.log(deleteUser)
+// })
+// console.log(deleteUser)
+
+
 }
 
 main();

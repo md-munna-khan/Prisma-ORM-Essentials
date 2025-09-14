@@ -673,3 +673,179 @@ async function main() {
 main()
 
 ```
+
+## 48-9 Sorting and Organizing Data
+
+- inserting many 
+
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    // create many users data 
+
+    const insertedUsers = await prisma.user.createMany({
+        data: [
+            { name: "Alice Johnson", email: "alice@example.com", profilePhoto: "https://i.pravatar.cc/150?img=1" },
+            { name: "Bob Smith", email: "bob@example.com" },
+            { name: "Charlie Brown", email: "charlie@example.com", profilePhoto: "https://i.pravatar.cc/150?img=3" },
+            { name: "Diana Prince", email: "diana@example.com" },
+            { name: "Ethan Hunt", email: "ethan@example.com", profilePhoto: "https://i.pravatar.cc/150?img=5" },
+            { name: "Fiona Gallagher", email: "fiona@example.com", profilePhoto: "https://i.pravatar.cc/150?img=6" },
+            { name: "George Miller", email: "george@example.com" },
+            { name: "Hannah Lee", email: "hannah@example.com", profilePhoto: "https://i.pravatar.cc/150?img=8" },
+            { name: "Ivan Petrov", email: "ivan@example.com" },
+            { name: "Julia Roberts", email: "julia@example.com", profilePhoto: "https://i.pravatar.cc/150?img=10" },
+            { name: "Kevin Durant", email: "kevin@example.com" },
+            { name: "Laura Palmer", email: "laura@example.com", profilePhoto: "https://i.pravatar.cc/150?img=12" },
+            { name: "Michael Scott", email: "michael@example.com" },
+            { name: "Nina Williams", email: "nina@example.com", profilePhoto: "https://i.pravatar.cc/150?img=14" },
+            { name: "Oscar Isaac", email: "oscar@example.com" },
+        ],
+    })
+
+    console.log(insertedUsers)
+}
+
+main()
+
+```
+- inserting many and return
+
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    // create many users data 
+
+    const insertedUsers = await prisma.user.createManyAndReturn({
+        data: [
+            { name: "Alice Johnson", email: "alice@example.com", profilePhoto: "https://i.pravatar.cc/150?img=1" },
+            { name: "Bob Smith", email: "bob@example.com" },
+            { name: "Charlie Brown", email: "charlie@example.com", profilePhoto: "https://i.pravatar.cc/150?img=3" },
+            { name: "Diana Prince", email: "diana@example.com" },
+            { name: "Ethan Hunt", email: "ethan@example.com", profilePhoto: "https://i.pravatar.cc/150?img=5" },
+            { name: "Fiona Gallagher", email: "fiona@example.com", profilePhoto: "https://i.pravatar.cc/150?img=6" },
+            { name: "George Miller", email: "george@example.com" },
+            { name: "Hannah Lee", email: "hannah@example.com", profilePhoto: "https://i.pravatar.cc/150?img=8" },
+            { name: "Ivan Petrov", email: "ivan@example.com" },
+            { name: "Julia Roberts", email: "julia@example.com", profilePhoto: "https://i.pravatar.cc/150?img=10" },
+            { name: "Kevin Durant", email: "kevin@example.com" },
+            { name: "Laura Palmer", email: "laura@example.com", profilePhoto: "https://i.pravatar.cc/150?img=12" },
+            { name: "Michael Scott", email: "michael@example.com" },
+            { name: "Nina Williams", email: "nina@example.com", profilePhoto: "https://i.pravatar.cc/150?img=14" },
+            { name: "Oscar Isaac", email: "oscar@example.com" },
+        ],
+    })
+
+    console.log(insertedUsers)
+}
+
+main()
+
+```
+
+- if we want to sort by id in asc order 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        orderBy : {
+            id: 'asc'
+        }
+    })
+    console.log(users)
+}
+
+main()
+
+```
+- if we want to sort by name in desc order 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        orderBy : {
+            name: 'desc'
+        }
+    })
+    console.log(users)
+}
+
+main()
+
+```
+- if we want to sort by name and email in desc order (multiple sort items) 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        orderBy: [
+            { name: 'desc' },   // first sort by name (desc)
+            { email: 'asc' }    // then sort by email (asc)
+        ],
+    })
+
+    console.log(users)
+}
+
+main()
+
+```
+
+- for exact match search 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        where :{
+            name : "Sazid"
+        },
+        orderBy : {
+            name: 'asc'
+        }
+    })
+    console.log(users)
+}
+
+main()
+
+```
