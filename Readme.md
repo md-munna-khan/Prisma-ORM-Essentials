@@ -413,3 +413,117 @@ npx generate prisma
 ```
 
 - now run `npm run dev` this will create the user. 
+## 48-6 Finding Data from the Database
+
+- see all the data 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    const usersData = await prisma.user.findMany()
+    console.log(usersData)
+}
+
+main()
+
+```
+
+- if we want to find using conditions 
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    const usersData = await prisma.user.findMany({
+        where :{
+            id : 3
+        }
+    })
+    console.log(usersData)
+}
+
+main()
+
+```
+
+- if we want to find using name 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+async function main() {
+    const usersData = await prisma.user.findMany({
+        where :{
+            name : "Sazid"
+        }
+    })
+    console.log(usersData)
+}
+
+main()
+
+```
+- if we want to find get only one in object. 
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const findUserById = await prisma.user.findUnique(
+        {
+            where: {
+                id: 3
+            }
+        }
+    )
+
+    console.log(findUserById)
+}
+
+main()
+
+```
+- if we want to throw error if any user not found we have to use `findUniqueOrThrow`
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    const findUserById = await prisma.user.findUniqueOrThrow(
+        {
+            where: {
+                id: 7
+            }
+        }
+    )
+
+    console.log(findUserById)
+}
+
+main()
+
+```
+
+### Summary 
+
+1. Create 
+2. findMany - array of object 
+3. findUnique - returns single object 
+4. findUnique - return single object if exists, otherwise throw error
