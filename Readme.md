@@ -229,3 +229,135 @@ npx prisma migrate reset
 npx prisma migrate dev 
 ```
 
+## 48-4 Solving TypeScript Issues with Prisma
+- lets write query using the created schema migration 
+
+- create a function in root -> index.ts 
+
+```ts 
+async function main(){
+console.log("Hello From Prisma")
+}
+
+main()
+```
+
+- install the `ts-node`
+
+```
+npm i -D ts-node
+```
+- rin the index file 
+```
+ts-node index.ts
+```
+
+- Lets connect with prisma 
+
+- add `"type" : "module` inside the package.json
+
+```json
+{
+  "name": "prisma-orm-essentials",
+  "version": "1.0.0",
+  "description": "GitHub Link: https://github.com/Apollo-Level2-Web-Dev/hello-prisma-orm",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sazid60/PRISMA-ORM-ESSENTIALS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sazid60/PRISMA-ORM-ESSENTIALS/issues"
+  },
+  "homepage": "https://github.com/Sazid60/PRISMA-ORM-ESSENTIALS#readme",
+  
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "prisma": "^6.16.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.0"
+  }
+}
+
+```
+
+- `"moduleResolution": "nodenext",` inside tsconfig.ts 
+
+```ts 
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": ".",
+    "outDir": "./dist",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "nodenext",
+    "target": "esnext",
+    "moduleResolution": "nodenext",
+    "types": [],
+    // For nodejs:
+    // "lib": ["esnext"],
+    // "types": ["node"],
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+  }
+}
+
+```
+
+- root -> index.ts 
+
+```ts 
+import { PrismaClient } from "./generated/prisma/index.js"
+
+
+
+
+
+const prisma = new PrismaClient()
+
+async function main(){
+console.log("Hello From Prisma")
+}
+
+main()
+
+```
