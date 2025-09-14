@@ -527,3 +527,94 @@ main()
 2. findMany - array of object 
 3. findUnique - returns single object 
 4. findUnique - return single object if exists, otherwise throw error
+## 48-7 Updating Data in the Database
+
+- update - update a single data 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+
+
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    // update user data 
+    const updatedUser = await prisma.user.update({
+        where:{
+            id : 1 
+        },
+        data : {
+            name : "Shahnawaz Sazid",
+            email : "shahnawaz@gmail.com",
+            profilePhoto : "habjijabni"        }
+    })
+
+    console.log(updatedUser)
+}
+
+main()
+
+```
+- updateMany -  update multiple fields 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const updateProfilePhoto = await prisma.user.updateMany({
+        where: {
+            profilePhoto : null
+        },
+        data :{
+            profilePhoto:"No Photo "
+        }
+
+    })
+
+    console.log(updateProfilePhoto)
+
+    const usersData = await prisma.user.findMany()
+    console.log(usersData)
+}
+
+main()
+
+```
+
+- if we want to see updated profiles we have to return 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const updateProfilePhoto = await prisma.user.updateManyAndReturn({
+        where: {
+            profilePhoto: "No Photo"
+        },
+        data: {
+            profilePhoto: "No Photo available"
+        }
+
+    })
+
+    console.log(updateProfilePhoto)
+}
+
+main()
+
+```
