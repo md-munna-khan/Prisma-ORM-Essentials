@@ -200,3 +200,32 @@ npm install @prisma/client
 npx prisma generate
 ```
 - by default prisma client will be created and will be generated while we will be creating the migration. 
+
+## 48-3 Writing Your First Prisma Schema
+- creating user model in `prisma` -> `schema.prisma`
+
+```prisma 
+model User {
+  id           Int     @id @default(autoincrement())
+  name         String
+  email        String // required field 
+  profilePhoto String? // making it optional
+}
+
+```
+- migrate the schema 
+
+```
+npx prisma migrate dev 
+```
+- If we want to reset the stored data of previous and set the new one 
+
+```
+npx prisma migrate reset
+```
+- then migrate 
+
+```
+npx prisma migrate dev 
+```
+
