@@ -849,3 +849,33 @@ async function main() {
 main()
 
 ```
+## 48-10 Searching Data and Conclusion
+
+- for case insensitive search 
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        where :{
+            name : {
+                contains : "S", // case sensitive
+                mode:"insensitive" // cas insensitive
+            }
+        },
+        orderBy : {
+            name: 'asc'
+        }
+    })
+    console.log(users)
+}
+
+main()
+
+```
