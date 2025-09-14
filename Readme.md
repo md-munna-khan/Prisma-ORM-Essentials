@@ -229,3 +229,653 @@ npx prisma migrate reset
 npx prisma migrate dev 
 ```
 
+## 48-4 Solving TypeScript Issues with Prisma
+- lets write query using the created schema migration 
+
+- create a function in root -> index.ts 
+
+```ts 
+async function main(){
+console.log("Hello From Prisma")
+}
+
+main()
+```
+
+- install the `ts-node`
+
+```
+npm i -D ts-node
+```
+- rin the index file 
+```
+ts-node index.ts
+```
+
+- Lets connect with prisma 
+
+- add `"type" : "module` inside the package.json
+
+```json
+{
+  "name": "prisma-orm-essentials",
+  "version": "1.0.0",
+  "description": "GitHub Link: https://github.com/Apollo-Level2-Web-Dev/hello-prisma-orm",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sazid60/PRISMA-ORM-ESSENTIALS.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Sazid60/PRISMA-ORM-ESSENTIALS/issues"
+  },
+  "homepage": "https://github.com/Sazid60/PRISMA-ORM-ESSENTIALS#readme",
+  
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "prisma": "^6.16.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.20.5",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.0"
+  }
+}
+
+```
+
+- `"moduleResolution": "nodenext",` inside tsconfig.ts 
+
+```ts 
+{
+  // Visit https://aka.ms/tsconfig to read more about this file
+  "compilerOptions": {
+    // File Layout
+    "rootDir": ".",
+    "outDir": "./dist",
+
+    // Environment Settings
+    // See also https://aka.ms/tsconfig/module
+    "module": "nodenext",
+    "target": "esnext",
+    "moduleResolution": "nodenext",
+    "types": [],
+    // For nodejs:
+    // "lib": ["esnext"],
+    // "types": ["node"],
+    // and npm install -D @types/node
+
+    // Other Outputs
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+
+    // Stricter Typechecking Options
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+
+    // Style Options
+    // "noImplicitReturns": true,
+    // "noImplicitOverride": true,
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    // "noFallthroughCasesInSwitch": true,
+    // "noPropertyAccessFromIndexSignature": true,
+
+    // Recommended Options
+    "strict": true,
+    "jsx": "react-jsx",
+    "verbatimModuleSyntax": true,
+    "isolatedModules": true,
+    "noUncheckedSideEffectImports": true,
+    "moduleDetection": "force",
+    "skipLibCheck": true,
+  }
+}
+
+```
+
+- root -> index.ts 
+
+```ts 
+import { PrismaClient } from "./generated/prisma/index.js"
+
+
+
+
+
+const prisma = new PrismaClient()
+
+async function main(){
+console.log("Hello From Prisma")
+}
+
+main()
+
+```
+
+## 48-5 Inserting Data into the Database
+- we will delete the generate folder and generate again but we do not want to mention the output here in schema.prisma
+
+```prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int     @id @default(autoincrement())
+  name         String
+  email        String // required field 
+  profilePhoto String? // making it optional
+}
+
+```
+- run the command to generate new 
+
+```
+npx generate prisma 
+```
+- add the script to package.js 
+
+```json 
+  "scripts": {
+    // "dev": "node --loader ts-node/esm src/index.ts",
+    "dev": "tsx src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+```
+
+- src -> index.ts
+
+```ts 
+
+```
+
+- now run `npm run dev` this will create the user. 
+## 48-6 Finding Data from the Database
+
+- see all the data 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    const usersData = await prisma.user.findMany()
+    console.log(usersData)
+}
+
+main()
+
+```
+
+- if we want to find using conditions 
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    const usersData = await prisma.user.findMany({
+        where :{
+            id : 3
+        }
+    })
+    console.log(usersData)
+}
+
+main()
+
+```
+
+- if we want to find using name 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+async function main() {
+    const usersData = await prisma.user.findMany({
+        where :{
+            name : "Sazid"
+        }
+    })
+    console.log(usersData)
+}
+
+main()
+
+```
+- if we want to find get only one in object. 
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const findUserById = await prisma.user.findUnique(
+        {
+            where: {
+                id: 3
+            }
+        }
+    )
+
+    console.log(findUserById)
+}
+
+main()
+
+```
+- if we want to throw error if any user not found we have to use `findUniqueOrThrow`
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    const findUserById = await prisma.user.findUniqueOrThrow(
+        {
+            where: {
+                id: 7
+            }
+        }
+    )
+
+    console.log(findUserById)
+}
+
+main()
+
+```
+
+### Summary 
+
+1. Create 
+2. findMany - array of object 
+3. findUnique - returns single object 
+4. findUnique - return single object if exists, otherwise throw error
+## 48-7 Updating Data in the Database
+
+- update - update a single data 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+
+
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    // update user data 
+    const updatedUser = await prisma.user.update({
+        where:{
+            id : 1 
+        },
+        data : {
+            name : "Shahnawaz Sazid",
+            email : "shahnawaz@gmail.com",
+            profilePhoto : "habjijabni"        }
+    })
+
+    console.log(updatedUser)
+}
+
+main()
+
+```
+- updateMany -  update multiple fields 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const updateProfilePhoto = await prisma.user.updateMany({
+        where: {
+            profilePhoto : null
+        },
+        data :{
+            profilePhoto:"No Photo "
+        }
+
+    })
+
+    console.log(updateProfilePhoto)
+
+    const usersData = await prisma.user.findMany()
+    console.log(usersData)
+}
+
+main()
+
+```
+
+- if we want to see updated profiles we have to return 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const updateProfilePhoto = await prisma.user.updateManyAndReturn({
+        where: {
+            profilePhoto: "No Photo"
+        },
+        data: {
+            profilePhoto: "No Photo available"
+        }
+
+    })
+
+    console.log(updateProfilePhoto)
+}
+
+main()
+
+```
+
+## 48-8 Deleting Data from the Database
+
+- delete - delete one 
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const deleteUser = await prisma.user.delete({
+        where: {
+            id: 1
+        }
+    })
+
+    console.log(deleteUser)
+
+    const usersData = await prisma.user.findMany()
+    console.log(usersData)
+}
+
+main()
+
+```
+
+- deleteMany 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const deleteUser = await prisma.user.deleteMany({
+        where: {
+            id: {
+                lt :3
+            }
+        }
+    })
+
+    console.log(deleteUser)
+}
+
+main()
+
+```
+
+## 48-9 Sorting and Organizing Data
+
+- inserting many 
+
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    // create many users data 
+
+    const insertedUsers = await prisma.user.createMany({
+        data: [
+            { name: "Alice Johnson", email: "alice@example.com", profilePhoto: "https://i.pravatar.cc/150?img=1" },
+            { name: "Bob Smith", email: "bob@example.com" },
+            { name: "Charlie Brown", email: "charlie@example.com", profilePhoto: "https://i.pravatar.cc/150?img=3" },
+            { name: "Diana Prince", email: "diana@example.com" },
+            { name: "Ethan Hunt", email: "ethan@example.com", profilePhoto: "https://i.pravatar.cc/150?img=5" },
+            { name: "Fiona Gallagher", email: "fiona@example.com", profilePhoto: "https://i.pravatar.cc/150?img=6" },
+            { name: "George Miller", email: "george@example.com" },
+            { name: "Hannah Lee", email: "hannah@example.com", profilePhoto: "https://i.pravatar.cc/150?img=8" },
+            { name: "Ivan Petrov", email: "ivan@example.com" },
+            { name: "Julia Roberts", email: "julia@example.com", profilePhoto: "https://i.pravatar.cc/150?img=10" },
+            { name: "Kevin Durant", email: "kevin@example.com" },
+            { name: "Laura Palmer", email: "laura@example.com", profilePhoto: "https://i.pravatar.cc/150?img=12" },
+            { name: "Michael Scott", email: "michael@example.com" },
+            { name: "Nina Williams", email: "nina@example.com", profilePhoto: "https://i.pravatar.cc/150?img=14" },
+            { name: "Oscar Isaac", email: "oscar@example.com" },
+        ],
+    })
+
+    console.log(insertedUsers)
+}
+
+main()
+
+```
+- inserting many and return
+
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+    // create many users data 
+
+    const insertedUsers = await prisma.user.createManyAndReturn({
+        data: [
+            { name: "Alice Johnson", email: "alice@example.com", profilePhoto: "https://i.pravatar.cc/150?img=1" },
+            { name: "Bob Smith", email: "bob@example.com" },
+            { name: "Charlie Brown", email: "charlie@example.com", profilePhoto: "https://i.pravatar.cc/150?img=3" },
+            { name: "Diana Prince", email: "diana@example.com" },
+            { name: "Ethan Hunt", email: "ethan@example.com", profilePhoto: "https://i.pravatar.cc/150?img=5" },
+            { name: "Fiona Gallagher", email: "fiona@example.com", profilePhoto: "https://i.pravatar.cc/150?img=6" },
+            { name: "George Miller", email: "george@example.com" },
+            { name: "Hannah Lee", email: "hannah@example.com", profilePhoto: "https://i.pravatar.cc/150?img=8" },
+            { name: "Ivan Petrov", email: "ivan@example.com" },
+            { name: "Julia Roberts", email: "julia@example.com", profilePhoto: "https://i.pravatar.cc/150?img=10" },
+            { name: "Kevin Durant", email: "kevin@example.com" },
+            { name: "Laura Palmer", email: "laura@example.com", profilePhoto: "https://i.pravatar.cc/150?img=12" },
+            { name: "Michael Scott", email: "michael@example.com" },
+            { name: "Nina Williams", email: "nina@example.com", profilePhoto: "https://i.pravatar.cc/150?img=14" },
+            { name: "Oscar Isaac", email: "oscar@example.com" },
+        ],
+    })
+
+    console.log(insertedUsers)
+}
+
+main()
+
+```
+
+- if we want to sort by id in asc order 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        orderBy : {
+            id: 'asc'
+        }
+    })
+    console.log(users)
+}
+
+main()
+
+```
+- if we want to sort by name in desc order 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        orderBy : {
+            name: 'desc'
+        }
+    })
+    console.log(users)
+}
+
+main()
+
+```
+- if we want to sort by name and email in desc order (multiple sort items) 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        orderBy: [
+            { name: 'desc' },   // first sort by name (desc)
+            { email: 'asc' }    // then sort by email (asc)
+        ],
+    })
+
+    console.log(users)
+}
+
+main()
+
+```
+
+- for exact match search 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        where :{
+            name : "Sazid"
+        },
+        orderBy : {
+            name: 'asc'
+        }
+    })
+    console.log(users)
+}
+
+main()
+
+```
+## 48-10 Searching Data and Conclusion
+
+- for case insensitive search 
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const users = await prisma.user.findMany({
+        where :{
+            name : {
+                contains : "S", // case sensitive
+                mode:"insensitive" // cas insensitive
+            }
+        },
+        orderBy : {
+            name: 'asc'
+        }
+    })
+    console.log(users)
+}
+
+main()
+
+```
