@@ -97,3 +97,106 @@ In this module, we’ll dive into Prisma ORM, one of the most powerful tools to 
 - For projects requiring broad database compatibility and a mature, well-supported ORM: Sequelize is a reliable choice.
 - For TypeScript-heavy projects demanding architectural flexibility and strong type safety: TypeORM provides a powerful solution.
 
+## 48-2 Project Initialization with Prisma
+
+- prisma official docs 
+
+[Prisms.io](https://www.prisma.io/docs/getting-started)
+
+- Install Prisma 
+[Prisma With Postgres](https://www.prisma.io/docs/getting-started/setup-prisma/start-from-scratch/relational-databases-typescript-postgresql)
+
+```
+mkdir hello-prisma
+cd hello-prisma
+```
+
+```
+npm init -y
+npm install prisma typescript tsx @types/node --save-dev
+```
+
+```
+npx tsc --init
+```
+
+```
+npx prisma
+```
+
+```
+npx prisma init --datasource-provider postgresql --output ../generated/prisma
+```
+- set the env 
+
+```
+DATABASE_URL="postgresql://USER:PASSWORD@HOST:PORT/DATABASE?schema=SCHEMA"
+```
+### Migration Works 
+- Set the schema prisma -> schema.prisma
+
+```prisma
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+// will be given by default 
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// additional schema 
+model Post {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  title     String   @db.VarChar(255)
+  content   String?
+  published Boolean  @default(false)
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+}
+
+model Profile {
+  id     Int     @id @default(autoincrement())
+  bio    String?
+  user   User    @relation(fields: [userId], references: [id])
+  userId Int     @unique
+}
+
+model User {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String?
+  posts   Post[]
+  profile Profile?
+}
+```
+
+- run this command to migrate 
+
+```
+npx prisma migrate dev --name init
+```
+- this will create a `migration` folder inside the prisma folder and inside the `migration.sql`, `sql` query will be generated 
+- It will also give a folder named `generated` which will create `types` for our project  
+
+### Create prisma client if not created 
+
+```
+npm install @prisma/client
+```
+- if there is need to generate manually run this command 
+
+```
+npx prisma generate
+```
+- by default prisma client will be created and will be generated while we will be creating the migration. 
