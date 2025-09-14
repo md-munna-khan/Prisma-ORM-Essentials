@@ -618,3 +618,58 @@ async function main() {
 main()
 
 ```
+
+## 48-8 Deleting Data from the Database
+
+- delete - delete one 
+
+```ts
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const deleteUser = await prisma.user.delete({
+        where: {
+            id: 1
+        }
+    })
+
+    console.log(deleteUser)
+
+    const usersData = await prisma.user.findMany()
+    console.log(usersData)
+}
+
+main()
+
+```
+
+- deleteMany 
+
+```ts 
+import { PrismaClient } from "@prisma/client"
+
+
+const prisma = new PrismaClient()
+
+async function main() {
+    console.log("Hello From Prisma")
+
+    const deleteUser = await prisma.user.deleteMany({
+        where: {
+            id: {
+                lt :3
+            }
+        }
+    })
+
+    console.log(deleteUser)
+}
+
+main()
+
+```

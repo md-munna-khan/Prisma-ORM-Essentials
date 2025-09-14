@@ -33,15 +33,26 @@ async function main() {
 // })
 // console.log(updateUser)
 
-const updatedProfilePhoto = await prisma.user.updateManyAndReturn({
+// const updatedProfilePhoto = await prisma.user.updateManyAndReturn({
+//   where:{
+//     profilePhoto:null
+//   },
+//   data:{
+//   profilePhoto:"\\hret4ret45645765765876"
+//   }
+// })
+// console.log(updatedProfilePhoto)
+
+// delete user
+const deleteUser = await prisma.user.deleteMany({
   where:{
-    profilePhoto:null
-  },
-  data:{
-  profilePhoto:"\\hret4ret45645765765876"
+    id:{
+      lt:3
+    }
   }
+
 })
-console.log(updatedProfilePhoto)
+console.log(deleteUser)
 }
 
 main();
